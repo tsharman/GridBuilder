@@ -13,23 +13,20 @@ class GridBuilderApp : public AppNative {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+    void prepareSettings(cinder::app::AppBasic::Settings *settings);
+    int counter;
     VertexController *controller;
 };
 
+
+void GridBuilderApp::prepareSettings(cinder::app::AppBasic::Settings *settings){
+    settings->setWindowSize(800, 400);
+    settings->setFrameRate(100.0f);
+}
 void GridBuilderApp::setup()
 {
-    
+    counter = 0;
     controller = new VertexController();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
-    controller->addVertex();
 }
 
 
@@ -39,6 +36,11 @@ void GridBuilderApp::mouseDown( MouseEvent event )
 
 void GridBuilderApp::update()
 {
+    if((counter % 100) == 0) {
+        controller->addVertex();
+    }
+    counter++;
+    
 }
 
 void GridBuilderApp::draw()
@@ -47,15 +49,6 @@ void GridBuilderApp::draw()
 	gl::clear( Color( 0, 0, 0 ) );
     
     controller->drawVertexes();
-    /*
-    Vertex *newVertex = new Vertex(Vec2f(200.0f, 200.0f));
-    
-    Vertex *newVertexNorth = new Vertex(Vec2f(200.0f, 220.0f));
-    Vertex *newVertexWest = new Vertex(Vec2f(220.0f, 200.0f));
-    
-    newVertex->connections[Vertex::directions::NORTH] = newVertexNorth;
-    newVertex->connections[Vertex::directions::WEST] = newVertexWest;
-    newVertex->draw();*/
     
 }
 

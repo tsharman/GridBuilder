@@ -21,22 +21,32 @@ void VertexController::addVertex() {
     // check if the list is empty
     if(vertexes.empty()) {
         Vertex *newVertex = new Vertex(Vec2f(200.0f, 200.0f));
-        cout << "adding first vertex" << endl;
         this->vertexes.push_back(newVertex);
         
         return;
     }
     
     // iterating over all existing vertexes
+    bool foundVertexSpot = false;
     Vec2f newVertexLoc;
     Vertex *originVertex;
     int connectionIndex;
     std::list<Vertex *>::iterator ptr;
     for(ptr = vertexes.begin(); ptr != vertexes.end(); ++ptr) {
         
+        Vec2f vertexPosition = (*ptr)->position;
+        if(vertexPosition.y <= 0.0 || vertexPosition.y >= ci::app::getWindowHeight()) {
+            continue;
+        }
+        if(vertexPosition.x <= 0.0 || vertexPosition.x >= ci::app::getWindowWidth()) {
+            continue;
+        }
+        
         // looking for empty slot
         for(int i = Vertex::directions::NORTH; i <= Vertex::directions::SOUTH; i++) {
+            
             if((*ptr)->connections[i] == NULL) {
+                foundVertexSpot = true;
                 originVertex = (*ptr);
                 connectionIndex = i;
                 if(i == Vertex::directions::NORTH) {
@@ -54,6 +64,9 @@ void VertexController::addVertex() {
                 break;
             }
         }
+        if(foundVertexSpot) {
+            break;
+        }
         
     }
     
@@ -69,11 +82,8 @@ void VertexController::addVertex() {
 
 void VertexController::drawVertexes() {
     std::list<Vertex *>::iterator ptr;
-    int counter = 0;
     for(ptr = vertexes.begin(); ptr != vertexes.end(); ++ptr) {
-        cout << "woah! " << counter << endl;
         (*ptr)->draw();
-        counter++;
         
     }
 }

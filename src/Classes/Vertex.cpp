@@ -30,7 +30,6 @@ void Vertex::draw() {
         if(currentVertex != NULL) {
             Vec2f start = this->position;
             Vec2f end = currentVertex->position;
-            cout << "drawing" << endl;
             ci::gl::drawLine(start, end);
             
         }
