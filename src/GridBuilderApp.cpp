@@ -36,8 +36,9 @@ void GridBuilderApp::mouseDown( MouseEvent event )
 
 void GridBuilderApp::update()
 {
-    if((counter % 100) == 0) {
+    if((counter % 10) == 0) {
         controller->addVertex();
+        
     }
     counter++;
     

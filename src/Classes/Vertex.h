@@ -21,6 +21,7 @@ public:
     Vertex *connections[4];
     enum directions { NORTH, EAST, SOUTH, WEST };
     void draw();
+    void drawTo(Vertex *vertex);
 };
 
 #endif /* defined(__GridBuilder__Vertex__) */

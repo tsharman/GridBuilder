@@ -71,9 +71,19 @@ void VertexController::addVertex() {
     }
     
     Vertex *newVertex = new Vertex(newVertexLoc);
-    this->vertexes.push_back(newVertex);
+    //cout << "adding vertex" << vertexes.size();
     
     originVertex->connections[connectionIndex] = newVertex;
+    
+    if(connectionIndex > 1) {
+        newVertex->connections[connectionIndex - 2] = originVertex;
+    }
+    else {
+        newVertex->connections[connectionIndex + 2] = originVertex;
+    }
+    
+    
+    this->vertexes.push_back(newVertex);
     
     //Vertex *newVertex = new Vertex(Vect2f(0.0f, 0.0f));
     //this->vertexes.push_back(newVertex);
