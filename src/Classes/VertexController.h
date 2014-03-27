@@ -22,8 +22,12 @@ public:
     
     void drawVertexes();
     void addVertex();
+    float calculateCoord(float gridIndex);
     float vertexDistance;
-    std::list<Vertex *> vertexes;
+    Vertex ***grid;
+    int rows;
+    int columns;
+    
     
 };
 

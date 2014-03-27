@@ -13,87 +13,83 @@
 using namespace std;
 
 VertexController::VertexController() {
-    vertexDistance = 20.0f;
+    vertexDistance = 5.0f;
+    rows = 20;
+    columns = 20;
+    
+    
+    // initializing grid
+    grid = new Vertex**[rows];
+    for (int i = 0; i < rows; ++i) {
+        grid[i] = new Vertex*[columns];
+    }
+    
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            grid[i][j] = NULL;
+        }
+    }
+    
+    // creating first Vertex
+    float coordX = calculateCoord(0);
+    cout << coordX << endl;
+    grid[0][0] = new Vertex(Vec2f(calculateCoord(0), calculateCoord(0)));
+}
+
+float VertexController::calculateCoord(float gridIndex) {
+    float distance = this->vertexDistance;
+    return (gridIndex * distance) + (distance / 2);
 }
 
 void VertexController::addVertex() {
-    
-    // check if the list is empty
-    if(vertexes.empty()) {
-        Vertex *newVertex = new Vertex(Vec2f(200.0f, 200.0f));
-        this->vertexes.push_back(newVertex);
-        
-        return;
-    }
-    
-    // iterating over all existing vertexes
-    bool foundVertexSpot = false;
-    Vec2f newVertexLoc;
-    Vertex *originVertex;
-    int connectionIndex;
-    std::list<Vertex *>::iterator ptr;
-    for(ptr = vertexes.begin(); ptr != vertexes.end(); ++ptr) {
-        
-        Vec2f vertexPosition = (*ptr)->position;
-        if(vertexPosition.y <= 0.0 || vertexPosition.y >= ci::app::getWindowHeight()) {
-            continue;
-        }
-        if(vertexPosition.x <= 0.0 || vertexPosition.x >= ci::app::getWindowWidth()) {
-            continue;
-        }
-        
-        // looking for empty slot
-        for(int i = Vertex::directions::NORTH; i <= Vertex::directions::SOUTH; i++) {
-            
-            if((*ptr)->connections[i] == NULL) {
-                foundVertexSpot = true;
-                originVertex = (*ptr);
-                connectionIndex = i;
-                if(i == Vertex::directions::NORTH) {
-                    newVertexLoc = Vec2f((*ptr)->position.x, (*ptr)->position.y + vertexDistance);
-                }
-                else if(i == Vertex::directions::EAST) {
-                    newVertexLoc = Vec2f((*ptr)->position.x + vertexDistance, (*ptr)->position.y);
-                }
-                else if(i == Vertex::directions::SOUTH) {
-                    newVertexLoc = Vec2f((*ptr)->position.x, (*ptr)->position.y - vertexDistance);
-                }
-                else if(i == Vertex::directions::WEST) {
-                    newVertexLoc = Vec2f((*ptr)->position.x - vertexDistance, (*ptr)->position.y);
-                }
+    bool foundVertex = false;
+    for(int i = 0; i < rows; i++) {
+        for(int k = 0; k < columns; k++) {
+            cout << k << endl;
+            Vertex *currentVertex = grid[i][k];
+            if(currentVertex == NULL) {
+                cout << "adding vertex" << i  << " " << k << endl;
+                grid[i][k] = new Vertex(Vec2f(calculateCoord(i), calculateCoord(k)));
+                foundVertex = true;
+            }
+            if(foundVertex) {
                 break;
             }
         }
-        if(foundVertexSpot) {
+        if(foundVertex) {
             break;
         }
-        
     }
-    
-    Vertex *newVertex = new Vertex(newVertexLoc);
-    //cout << "adding vertex" << vertexes.size();
-    
-    originVertex->connections[connectionIndex] = newVertex;
-    
-    if(connectionIndex > 1) {
-        newVertex->connections[connectionIndex - 2] = originVertex;
-    }
-    else {
-        newVertex->connections[connectionIndex + 2] = originVertex;
-    }
-    
-    
-    this->vertexes.push_back(newVertex);
-    
-    //Vertex *newVertex = new Vertex(Vect2f(0.0f, 0.0f));
-    //this->vertexes.push_back(newVertex);
 }
 
 
 void VertexController::drawVertexes() {
-    std::list<Vertex *>::iterator ptr;
-    for(ptr = vertexes.begin(); ptr != vertexes.end(); ++ptr) {
-        (*ptr)->draw();
-        
+    for(int i = 0; i < rows; i++) {
+        for(int k = 0; k < columns; k++) {
+            Vertex *currentVertex = grid[i][k];
+            if(currentVertex == NULL) {
+                continue;
+            }
+            
+            Vertex *inspectingVertex;
+            // check top tile
+            if(i > 0) {
+                
+                inspectingVertex = grid[i - 1][k];
+                if(inspectingVertex != NULL) {
+                    currentVertex->drawTo(inspectingVertex);
+                }
+            }
+            
+            // check left tile
+            if(k > 0) {
+                cout << "drawing " << k << endl;
+                inspectingVertex = grid[i][k - 1];
+                if(inspectingVertex != NULL) {
+                    currentVertex->drawTo(inspectingVertex);
+                }
+            }
+            
+        }
     }
 }
