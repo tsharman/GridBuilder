@@ -16,8 +16,8 @@ using namespace std;
 VertexController::VertexController() {
     cout << ci::app::getWindowHeight()  << endl;
     vertexDistance = 10.0f;
-    rows = 20;
-    columns = 20;
+    rows = 40;
+    columns = 40;
     
     
     // initializing grid
@@ -33,7 +33,7 @@ VertexController::VertexController() {
     }
     
     // creating first Vertex
-    grid[0][0] = new Vertex(Vec2f(calculateCoord(0), calculateCoord(0)));
+    grid[0][0] = new Vertex(Vec2f(calculateCoord(Rand::randInt(0, rows)), Rand::randInt(0, columns)));
 }
 
 float VertexController::calculateCoord(float gridIndex) {
@@ -43,11 +43,8 @@ float VertexController::calculateCoord(float gridIndex) {
 
 void VertexController::addVertex() {
     bool foundVertex = false;
-    for(int i = 0; i < rows; i++) {
-        if(Rand::randBool()) {
-            continue;
-        }
-        for(int k = 0; k < columns; k++) {
+    for(int i = Rand::randInt(0, rows); i < rows; i++) {
+        for(int k = Rand::randInt(0, columns); k < columns; k++) {
             if(Rand::randBool()) {
                 continue;
             }
