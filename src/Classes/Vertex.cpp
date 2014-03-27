@@ -37,7 +37,6 @@ void Vertex::draw() {
 }
 
 void Vertex::drawTo(Vertex *vertex) {
-    cout << "drawing" << endl;
     ci::gl::color(200.0f, 200.0f, 200.0f);
     Vec2f start = this->position;
     Vec2f end = vertex->position;

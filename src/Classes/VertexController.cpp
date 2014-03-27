@@ -48,7 +48,6 @@ void VertexController::addVertex() {
             cout << k << endl;
             Vertex *currentVertex = grid[i][k];
             if(currentVertex == NULL) {
-                cout << "adding vertex" << i  << " " << k << endl;
                 grid[i][k] = new Vertex(Vec2f(calculateCoord(i), calculateCoord(k)));
                 foundVertex = true;
             }
@@ -83,7 +82,6 @@ void VertexController::drawVertexes() {
             
             // check left tile
             if(k > 0) {
-                cout << "drawing " << k << endl;
                 inspectingVertex = grid[i][k - 1];
                 if(inspectingVertex != NULL) {
                     currentVertex->drawTo(inspectingVertex);
