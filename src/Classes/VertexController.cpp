@@ -9,11 +9,13 @@
 #include "VertexController.h"
 
 #include <iostream>
+#include "cinder/Rand.h"
 
 using namespace std;
 
 VertexController::VertexController() {
-    vertexDistance = 5.0f;
+    cout << ci::app::getWindowHeight()  << endl;
+    vertexDistance = 10.0f;
     rows = 20;
     columns = 20;
     
@@ -31,8 +33,6 @@ VertexController::VertexController() {
     }
     
     // creating first Vertex
-    float coordX = calculateCoord(0);
-    cout << coordX << endl;
     grid[0][0] = new Vertex(Vec2f(calculateCoord(0), calculateCoord(0)));
 }
 
@@ -44,10 +44,15 @@ float VertexController::calculateCoord(float gridIndex) {
 void VertexController::addVertex() {
     bool foundVertex = false;
     for(int i = 0; i < rows; i++) {
+        if(Rand::randBool()) {
+            continue;
+        }
         for(int k = 0; k < columns; k++) {
-            cout << k << endl;
+            if(Rand::randBool()) {
+                continue;
+            }
             Vertex *currentVertex = grid[i][k];
-            if(currentVertex == NULL) {
+            if((currentVertex == NULL) && Rand::randBool()) {
                 grid[i][k] = new Vertex(Vec2f(calculateCoord(i), calculateCoord(k)));
                 foundVertex = true;
             }
